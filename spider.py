@@ -58,17 +58,19 @@ def get_table(count=None):
     script='window.scrollTo(0, document.body.scrollHeight);'
 
     result_list=[]
-    driver = webdriver.Firefox(options=get_driver_options())
-    if(driver==None):
-        print("driver error",flush=True)
-        raise Exception("system driver error")
+    
     for start_url in start_urls:
         url=start_url
+        driver = webdriver.Firefox(options=get_driver_options())
+        if(driver==None):
+            print("driver does not exist",flush=True)
+            raise Exception("system driver error")
+        time.sleep(10)
         while(url!=None):
             result=[]
             # 设置最大等待时间为10秒
             driver.implicitly_wait(10)
-            driver.set_page_load_timeout(10)
+            driver.set_page_load_timeout(15)
             html = ""
             try:
                 time.sleep(3)
