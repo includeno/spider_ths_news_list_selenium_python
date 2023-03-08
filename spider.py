@@ -59,6 +59,7 @@ def get_table(count=None):
     script='window.scrollTo(0, document.body.scrollHeight);'
 
     result_list=[]
+    page_count=0
     
     for start_url in start_urls:
         url=start_url
@@ -67,8 +68,8 @@ def get_table(count=None):
             print("driver does not exist",flush=True)
             raise Exception("system driver error")
         time.sleep(10)
+        result=[]
         while(url!=None):
-            result=[]
             # 设置最大等待时间为10秒
             driver.implicitly_wait(10)
             driver.set_page_load_timeout(15)
@@ -80,8 +81,10 @@ def get_table(count=None):
             except Exception as e:
                 print("driver error",e,flush=True)
                 html = driver.page_source
-            
-            print("html",len(html),flush=True)
+            print("========"*15)
+            print("url:",url)
+            print("page_count:",page_count)
+            print("html:",len(html),flush=True)
             # 获取页面源代码
             soup = BeautifulSoup(html, 'html.parser')
 
@@ -94,22 +97,14 @@ def get_table(count=None):
                     des=li.select_one('span[class="arc-title"]').select_one('a').text.strip()
 
                     temp={'link':news_url,'title':title,'time':time_str,'des':des}
-                    print("line:",str(temp),flush=True)
+                    print("line:",str(temp))
                     result.append(temp)
             except:
                 print("news_list error",news_list,flush=True)
                 time.sleep(3)
                 continue
             result_list=result_list+result
-            #
-            df = pd.DataFrame(result, columns=['link','title','time','des'])
-            try:
-                csv_df=pd.read_csv(csv_file,index=False)
-                csv_df.merge(df)
-                csv_df.drop_duplicates(subset=['link'],keep='last',inplace=True)
-                csv_df.to_csv(csv_file)
-            except:
-                df.to_csv(csv_file,index=False)
+            page_count=page_count+1
             
             try:
                 next_page_url = soup.select_one('a[class="next"]').get('href').strip()
@@ -118,10 +113,19 @@ def get_table(count=None):
                 url=None
                 print("next_page_url error",flush=True)
                 break
+        print("result:",(result),flush=True)
+        df = pd.DataFrame(result, columns=['link','title','time','des'])
+        try:
+            csv_df=pd.read_csv(csv_file,index=False)
+            csv_df.merge(df)
+            csv_df.drop_duplicates(subset=['link'],keep='last',inplace=True)
+            csv_df.to_csv(csv_file)
+            print("csv 合并成功",flush=True)
+        except:
+            df.to_csv(csv_file,index=False)
+            print("csv 新建成功",flush=True)
     
     driver.quit()
-    
-
     return csv_file,result_list
 
 #get_table(1)
