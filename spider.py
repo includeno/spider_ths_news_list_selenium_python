@@ -88,7 +88,7 @@ def get_table(count=None):
                 title=li.select_one('span[class="arc-title"]').select_one('a').text.strip()
                 time_str=li.select_one('span[class="arc-title"]').select_one('span').text.strip()
                 news_url=li.select_one('span[class="arc-title"]').select_one('a').get('href').strip()
-                des=li.select_one('span[class="arc-title"]').select_one('a').get('href').strip()
+                des=li.select_one('span[class="arc-title"]').select_one('a').text.strip()
 
                 temp={'link':news_url,'title':title,'time':time_str,'des':des}
                 print("line:",str(temp),flush=True)
