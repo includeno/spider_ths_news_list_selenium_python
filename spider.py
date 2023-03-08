@@ -68,15 +68,12 @@ def get_table(count=None):
             result=[]
             # 设置最大等待时间为10秒
             driver.implicitly_wait(10)
-            driver.set_page_load_timeout(6)
+            driver.set_page_load_timeout(10)
             html = ""
             try:
                 time.sleep(3)
                 driver.get(url)
                 html = driver.page_source
-                driver.execute_script('window.scrollTo(0, document.body.scrollHeight/3);')
-                driver.execute_script('window.scrollTo(0, 0);')
-                driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
             except Exception as e:
                 print("driver error",e,flush=True)
                 html = driver.page_source
