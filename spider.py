@@ -85,17 +85,20 @@ def get_table(count=None):
             soup = BeautifulSoup(html, 'html.parser')
 
             news_list = soup.select_one('div[class="list-con"]')
+            try:
+                for li in news_list.find_all(name='li'):
+                    title=li.select_one('span[class="arc-title"]').select_one('a').text.strip()
+                    time_str=li.select_one('span[class="arc-title"]').select_one('span').text.strip()
+                    news_url=li.select_one('span[class="arc-title"]').select_one('a').get('href').strip()
+                    des=li.select_one('span[class="arc-title"]').select_one('a').text.strip()
 
-            for li in news_list.find_all(name='li'):
-                title=li.select_one('span[class="arc-title"]').select_one('a').text.strip()
-                time_str=li.select_one('span[class="arc-title"]').select_one('span').text.strip()
-                news_url=li.select_one('span[class="arc-title"]').select_one('a').get('href').strip()
-                des=li.select_one('span[class="arc-title"]').select_one('a').text.strip()
-
-                temp={'link':news_url,'title':title,'time':time_str,'des':des}
-                print("line:",str(temp),flush=True)
-                result.append(temp)
-            time.sleep(3)
+                    temp={'link':news_url,'title':title,'time':time_str,'des':des}
+                    print("line:",str(temp),flush=True)
+                    result.append(temp)
+            except:
+                print("news_list error",news_list,flush=True)
+                time.sleep(3)
+                continue
             result_list=result_list+result
             try:
                 next_page_url = soup.select_one('a[class="next"]').get('href').strip()
