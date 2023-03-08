@@ -44,6 +44,7 @@ def get_driver_options():
     
     
 def get_table(count=None):
+    csv_file="links.csv"
     start_urls=[
         'https://stock.10jqka.com.cn/usstock/mgyw_list/',
         'https://stock.10jqka.com.cn/usstock/mggsxw_list/',
@@ -100,6 +101,16 @@ def get_table(count=None):
                 time.sleep(3)
                 continue
             result_list=result_list+result
+            #
+            df = pd.DataFrame(result, columns=['link','title','time','des'])
+            try:
+                csv_df=pd.read_csv(csv_file,index=False)
+                csv_df.merge(df)
+                csv_df.drop_duplicates(subset=['link'],keep='last',inplace=True)
+                csv_df.to_csv(csv_file)
+            except:
+                df.to_csv(csv_file,index=False)
+            
             try:
                 next_page_url = soup.select_one('a[class="next"]').get('href').strip()
                 url=next_page_url
@@ -109,17 +120,7 @@ def get_table(count=None):
                 break
     
     driver.quit()
-    df = pd.DataFrame(result, columns=['link','title','time','des'])
-
-    #print(df.head())
-
-    csv_file="links.csv"
-    try:
-        csv_df=pd.read_csv(csv_file,index=False)
-        csv_df.merge(df)
-        csv_df.to_csv(csv_file)
-    except:
-        df.to_csv(csv_file,index=False)
+    
 
     return csv_file,result_list
 
