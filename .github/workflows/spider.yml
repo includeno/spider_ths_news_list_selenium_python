@@ -7,7 +7,7 @@ on: # push operation is operate
   #   # here since my repository branch is named `main` , you should follow your own repository like `master`
   #   branches: [main]
   schedule:
-    - cron: "0 0/6 * * *"
+    - cron: "0 0/10 * * *"
 # CI enviroment settings
 env:
   VERSION: "0.1"
