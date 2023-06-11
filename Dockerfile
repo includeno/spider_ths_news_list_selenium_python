@@ -1,4 +1,4 @@
-FROM includeno/pythonfirefox:3.9.16.firefox102.8.0esr
+FROM includeno/pythonfirefox:lastest
 
 WORKDIR /app
 
