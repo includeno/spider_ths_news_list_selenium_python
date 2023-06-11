@@ -29,4 +29,4 @@ with open('DATE', 'w') as f:
 
 file_path,list=get_table()
 
-send_email(args.sender,args.ps,args.recipient,args.smtp_server,args.port,subject='Tong Hua Shun News',attachment_path=file_path)
+#send_email(args.sender,args.ps,args.recipient,args.smtp_server,args.port,subject='Tong Hua Shun News',attachment_path=file_path)
